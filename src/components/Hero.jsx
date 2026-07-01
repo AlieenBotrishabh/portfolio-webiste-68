@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowRight, Check, Mail, Play } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Mail, Play } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { submitLead } from "../lib/api.js";
 import { useTypewriter } from "../hooks/useTypewriter.js";
@@ -24,7 +24,6 @@ export function Hero({ resumeData }) {
     if (mode !== "submitted") {
       return undefined;
     }
-
     const timer = window.setTimeout(() => {
       setMode("button");
       setSubmitted(false);
@@ -32,19 +31,13 @@ export function Hero({ resumeData }) {
       setIsSubmitting(false);
       setResetTick((value) => value + 1);
     }, 4000);
-
     return () => window.clearTimeout(timer);
   }, [mode]);
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    if (!email.trim() || isSubmitting) {
-      return;
-    }
-
+    if (!email.trim() || isSubmitting) return;
     setIsSubmitting(true);
-
     try {
       await submitLead(email.trim());
       setSubmitted(true);
@@ -57,54 +50,72 @@ export function Hero({ resumeData }) {
     }
   }
 
-  const buttonLabel = isSubmitting ? "Saving..." : "Get early access";
   const ButtonIcon = submitted ? Check : ArrowRight;
 
+  function scrollDown() {
+    const about = document.querySelector("#about");
+    if (about) about.scrollIntoView({ behavior: "smooth" });
+  }
+
   return (
-    <section className="relative flex-1 flex flex-col items-center justify-center px-6">
-      <div className="relative z-10 text-center max-w-5xl mx-auto flex flex-col items-center justify-center w-full gap-12">
-        <div>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-white/80 text-[10px] md:text-[11px] font-medium tracking-[0.2em] uppercase mb-4"
-          >
-            BUILD A NO-CODE AI APP IN MINUTES
-          </motion.p>
+    <section
+      id="hero"
+      className="relative flex flex-col items-center justify-center px-6 h-screen min-h-[600px]"
+    >
+      <div className="relative z-10 text-center max-w-5xl mx-auto flex flex-col items-center justify-center w-full gap-10">
+        {/* Tagline */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-white/80 text-[10px] md:text-[11px] font-medium tracking-[0.2em] uppercase"
+        >
+          {resumeData.role}
+        </motion.p>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl md:text-[64px] font-medium tracking-[-0.01em] leading-[1.1] mb-6 bg-gradient-to-b from-white via-white/95 to-white/70 bg-clip-text text-transparent max-w-4xl mx-auto"
-            style={{ fontFamily: "'Instrument Serif', serif" }}
-          >
-            A new way to think and create
-            <br className="hidden md:block" /> with computers
-          </motion.h1>
+        {/* Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="text-4xl md:text-[64px] font-medium tracking-[-0.01em] leading-[1.1] bg-gradient-to-b from-white via-white/95 to-white/70 bg-clip-text text-transparent max-w-4xl mx-auto"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
+          {resumeData.name}
+          <br className="hidden md:block" />
+          <span className="text-3xl md:text-[48px] text-white/65">
+            {" "}Full-Stack & ML Engineer
+          </span>
+        </motion.h1>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="mx-auto max-w-2xl text-sm md:text-base text-white/70 leading-relaxed"
-          >
-            {resumeData.summary}
-          </motion.p>
+        {/* Summary */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="mx-auto max-w-2xl text-sm md:text-base text-white/65 leading-relaxed -mt-2"
+        >
+          {resumeData.summary}
+        </motion.p>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-[11px] text-white/55">
-            <span className="glass-pill rounded-full px-3 py-1">{resumeData.location}</span>
-            <span className="glass-pill rounded-full px-3 py-1">{resumeData.email}</span>
-            <span className="glass-pill rounded-full px-3 py-1">Full-time opportunities</span>
-          </div>
-        </div>
+        {/* Location / Email pills */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="flex flex-wrap items-center justify-center gap-2 text-[11px] text-white/55 -mt-2"
+        >
+          <span className="glass-pill px-3 py-1">{resumeData.location}</span>
+          <span className="glass-pill px-3 py-1">{resumeData.email}</span>
+          <span className="glass-pill px-3 py-1">Open to full-time roles</span>
+        </motion.div>
 
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="min-h-[50px] mt-2"
+          className="min-h-[50px]"
         >
           <AnimatePresence mode="wait">
             {mode === "button" ? (
@@ -151,17 +162,36 @@ export function Hero({ resumeData }) {
           </AnimatePresence>
         </motion.div>
 
+        {/* Play Demo link */}
         <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
           type="button"
-          className="inline-flex items-center gap-2 text-white/80 hover:text-white/40 transition-colors duration-300 text-[13px] font-medium tracking-wide"
+          className="inline-flex items-center gap-2 text-white/80 hover:text-white/40 transition-colors duration-300 text-[13px] font-medium tracking-wide -mt-2"
         >
           <Play className="h-4 w-4" />
           Play Video Demo
         </motion.button>
       </div>
+
+      {/* Scroll down indicator */}
+      <motion.button
+        type="button"
+        onClick={scrollDown}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 text-white/35 hover:text-white/60 transition-colors duration-300 cursor-pointer"
+      >
+        <span className="text-[10px] uppercase tracking-[0.2em] font-medium">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <ChevronDown className="w-4 h-4" />
+        </motion.div>
+      </motion.button>
     </section>
   );
 }

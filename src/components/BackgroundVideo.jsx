@@ -31,7 +31,7 @@ export function BackgroundVideo() {
   }, []);
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       <video
         ref={videoRef}
         autoPlay
@@ -40,8 +40,10 @@ export function BackgroundVideo() {
         playsInline
         className="h-full w-full object-cover opacity-100"
       />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_45%),linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.65)_100%)]" />
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px]" />
+      {/* Multi-layer overlay: top radial glow + full dark gradient for scroll sections */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(255,255,255,0.06),transparent_55%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0.55)_50%,rgba(0,0,0,0.85)_100%)]" />
+      <div className="absolute inset-0 bg-black/25 backdrop-blur-[1px]" />
     </div>
   );
 }
