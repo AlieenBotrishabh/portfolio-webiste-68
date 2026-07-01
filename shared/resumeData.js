@@ -5,8 +5,8 @@ export const resumeData = {
   location: "Mohali, India",
   phone: "+91-XXXXXXXXXX",
   links: {
-    linkedin: "https://linkedin.com/in/rishabh-kumar",
-    github: "https://github.com/rishabh-kumar",
+    linkedin: "https://www.linkedin.com/in/rishabh-kumar-932692291/",
+    github: "https://github.com/AlieenBotrishabh",
     portfolio: "#",
   },
   objective:
