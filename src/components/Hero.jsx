@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowRight, Check, ChevronDown, Mail, Play } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, Mail } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { submitLead } from "../lib/api.js";
 import { useTypewriter } from "../hooks/useTypewriter.js";
@@ -162,17 +162,6 @@ export function Hero({ resumeData }) {
           </AnimatePresence>
         </motion.div>
 
-        {/* Play Demo link */}
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          type="button"
-          className="inline-flex items-center gap-2 text-white/80 hover:text-white/40 transition-colors duration-300 text-[13px] font-medium tracking-wide -mt-2"
-        >
-          <Play className="h-4 w-4" />
-          Play Video Demo
-        </motion.button>
       </div>
 
       {/* Scroll down indicator */}
