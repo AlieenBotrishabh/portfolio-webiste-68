@@ -7,3 +7,4 @@ dist
 coverage
 *.log
 22BIT70062_Rishabh.pdf
+.env*.local

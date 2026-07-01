@@ -1,20 +1,30 @@
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
 
 async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers ?? {}),
-    },
-    ...options,
-  });
+  // 5-second timeout — if the serverless function doesn't respond,
+  // the caller's catch() will receive an AbortError and fall back gracefully.
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(error.message || "Request failed");
+  try {
+    const response = await fetch(`${API_BASE}${path}`, {
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers ?? {}),
+      },
+      ...options,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || "Request failed");
+    }
+
+    return response.json();
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return response.json();
 }
 
 export function fetchResumeData() {
